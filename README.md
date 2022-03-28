@@ -51,7 +51,11 @@ Has de codificar una política de regles pels passwords.
 
 Una contrasenya que conté almenys 1 majúscula, 1 minúscula, 1 dígit, 1 caràcter especial i té una longitud d'almenys 10
 
-L'expressió regular és : ^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$
+L'expressió regular és : 
+```
+^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$
+
+```
 
 ```
 POST http://localhost:3000/users/register
