@@ -6,7 +6,8 @@ En aquest exercici anem afegir el paquet framework express.
 
 ## Requisits
 
-- El codi per reaitzar aquesta tasca. Repositori https://github.com/rgarciamvm/node-express-exam.git
+- Primer fer un _Fork_ d'aquest repositori https://github.com/rgarciamvm/node-express-exam.git
+- Després clona __el teu__ repositori
 
 ## Lliurament
 
@@ -21,7 +22,7 @@ $ git push origin master
 
 Per enviar l'exercici feu servir el classroom:
 
-1. Heu d'enviar-me el link del vostre repositori github (exemple : https://github.com/usuari/node-express-extendeduser.git)
+1. Heu d'enviar-me el link del vostre repositori github (exemple : https://github.com/usuari/node-express-exam.git)
 2. Heu d'enviar-me els fitxers un ZIP amb **TOT** el codi.
 
 ## S'ha de codificar
@@ -51,11 +52,7 @@ Has de codificar una política de regles pels passwords.
 
 Una contrasenya que conté almenys 1 majúscula, 1 minúscula, 1 dígit, 1 caràcter especial i té una longitud d'almenys 10
 
-L'expressió regular és : 
-```
-^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$
-
-```
+L'expressió regular és : ^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$
 
 ```
 POST http://localhost:3000/users/register
@@ -230,7 +227,7 @@ Content-Type: application/json
 
 ```
 
-## Codificar **eliminar usuari** (+2 punts)
+## Codificar **eliminar usuari** (2 PUNT)
 
 Un usuari prèviament registrat, amb el missatge HTTP DELETE /user s'ha de poder marcar l'usuari com a eliminat. Ho marcarem afegint la propietat active = 0.
 
