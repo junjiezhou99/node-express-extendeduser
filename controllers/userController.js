@@ -2,6 +2,18 @@ import HttpError from "http-errors";
 import userModel from '../models/usersModel.js'
 import bcrypt from 'bcrypt';
 import messagesapp from "../data/messages.js";
+import messageuser from "../data/messagesusr.js"
+import noticesModel from "../models/noticesModel.js";
+
+const ocultarInfo = (info) => {
+    console.log(`---> Middleware::ocultar informacion`);
+
+    //Eliminar contraseña y active de la respuesta
+    const result2 = JSON.parse(JSON.stringify(info));
+    delete result2["password"];
+    delete result2["active"];
+    return result2;
+}
 
 const register = (req, res, next) => {
     console.log(`---> userController::register`);
@@ -20,7 +32,8 @@ const register = (req, res, next) => {
             if (result < 0)
                 next(HttpError(400, { message: messagesapp.user_error_register }))
 
-            res.status(201).json(result);
+            const result2 = ocultarInfo(result);
+            res.status(200).json(result2);
         }
 
     } catch (error) {
@@ -49,10 +62,21 @@ const login = (req, res, next) => {
 
                 if (!bcrypt.compareSync(body.password, result.password))
                     next(HttpError(400, { message: messagesapp.user_error_login }));
-                else
-                    res.status(200).json(result);
-            }
+                else{
+                    const result2 = ocultarInfo(result);
 
+                    //Añadir mensaje de logueado correctamente
+                    result2.message = messageuser.user_msg_login;
+                    
+                    //Comprobar si hay usuario con noticias
+                    const userNotice = noticesModel.getNotice(result);
+
+                    if (userNotice){
+                        result2.notices = userNotice.notices;
+                    }
+                    res.status(200).json(result2);
+                }   
+            }
         }
 
     } catch (error) {
@@ -75,7 +99,8 @@ const updatePassword = (req, res, next) => {
                 next(HttpError(400, { message: messagesapp.user_error_login  }));
             else {
                 const result_new = userModel.updatePassword(user);
-                res.status(200).json(result_new);
+                const result2 = ocultarInfo(result_new);
+                res.status(200).json(result2);
             }
 
         }
@@ -98,7 +123,8 @@ const addGrantPrivileges = (req, res, next) => {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
             const result_new = userModel.addGrantPrivileges(user);
-            res.status(200).json(result_new);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
@@ -118,7 +144,8 @@ const insertGrantPrivileges = (req, res, next) => {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
             const result_new = userModel.insertGrantPrivileges(user);
-            res.status(200).json(result_new);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
@@ -139,7 +166,8 @@ const deleteGrantPrivileges = (req, res, next) => {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
             const result_new = userModel.deleteGrantPrivileges(user);
-            res.status(200).json(result_new);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
@@ -157,9 +185,8 @@ const getUser = (req, res, next) => {
         if (result === undefined) {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
-            const _result = JSON.parse(JSON.stringify(result));
-            delete _result.password;
-            res.status(200).json(_result);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
@@ -179,7 +206,8 @@ const deleteUser = (req, res, next) => {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
             const result_new = userModel.dropUser(user);
-            res.status(200).json(result_new);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
@@ -199,12 +227,47 @@ const activeUser = (req, res, next) => {
             next(HttpError(400, {message: messagesapp.user_error_username }));
         } else {
             const result_new = userModel.raiseUser(user);
-            res.status(200).json(result_new);
+            const result2 = ocultarInfo(result_new);
+            res.status(200).json(result2);
         }
     } catch (error) {
         next(error);
     }
 };
+
+const getFullUser = (req, res, next) => {
+    console.log(`---> userController::getFullUser`);
+
+    try {
+        const result = userModel.getUser(req.body);
+
+        if (result === undefined) {
+            next(HttpError(400, {message: messagesapp.user_error_username }));
+        } else {
+            res.status(200).json(result);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
+
+const dataProfile = (req, res, next) => {
+    console.log(`---> userController::dataProfile`);
+
+    try {
+        const result = userModel.dataProfile(req.body);
+
+        if (result === undefined) {
+            next(HttpError(400, {message: messagesapp.user_error_username }));
+        } else {
+            const result2 = ocultarInfo(result);
+            result2.message = messageuser.user_msg_addprofiledata;
+            res.status(200).json(result2);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
 
 
 export default {
@@ -216,6 +279,7 @@ export default {
     insertGrantPrivileges,
     getUser,
     deleteUser,
-    activeUser
-
+    activeUser,
+    getFullUser,
+    dataProfile,
 }

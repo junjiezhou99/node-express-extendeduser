@@ -4,8 +4,6 @@ import authHandler from '../middleware/authHandler.js'
 import userHandler from '../middleware/userHandler.js';
 import passHandler from '../middleware/passHandler.js';
 
-
-
 const router = Router();
 
 const addTimestamp = (req, res, next) => {
@@ -18,6 +16,9 @@ router.use((req, res, next) => {
     console.log('---> userRouter.js');
     next();
 });
+
+router.route('/fulluser')
+    .get(userController.getFullUser);
 
 router.route('/:user')
     .get(userController.getUser)
@@ -49,5 +50,7 @@ router.route('/user')
     .delete(userController.deleteUser)
     .put(userController.activeUser)
 
+router.route('/profiledata')
+    .post(userController.dataProfile);
 
 export default router;

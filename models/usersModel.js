@@ -76,6 +76,16 @@ class User {
         return _user;
 
     }
+
+    dataProfile(user) {
+        console.log(`---> userModel::dataProfile ${user.username}`);
+        const _user = users.find(element => (element.username == user.username));
+        if (_user !== undefined){
+            _user.profiledata = user.profiledata;
+        }
+
+        return _user;
+    }
 }
 
 export default new User();

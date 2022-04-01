@@ -14,7 +14,4 @@ export default
         user_error_username:'Invalid user Name',
         user_invalid_format:'Input user name is not in the correct format',
         passwd_invalid_format:'The password does not meet the password policy requirements'
-
-               
-
     }
