@@ -84,3 +84,11 @@ Content-Type: application/json
 {
 "username":"flash@dominio.es", "password":"man$Super3"
 }
+
+###
+GET http://localhost:3000/users/fulluser
+Content-Type: application/json
+
+{
+"username":"flash@dominio.es", "password":"man$Super3"
+}

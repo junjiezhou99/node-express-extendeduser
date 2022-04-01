@@ -185,7 +185,7 @@ const getUser = (req, res, next) => {
         if (result === undefined) {
             next(HttpError(400, { message: messagesapp.user_error_username }));
         } else {
-            const result2 = ocultarInfo(result_new);
+            const result2 = ocultarInfo(result);
             res.status(200).json(result2);
         }
     } catch (error) {
